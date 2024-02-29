@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dynamic Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<style>
+    
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.cropper-hidden{
+    position: fixed;
+}
+    body {
+        
+        font-family: Arial, sans-serif;
+    }
+    .imagePreview {
+    width: 200px; /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+    overflow: hidden;
+}
+
+    .quiz-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .question {
+        margin-bottom: 15px;
+        border-bottom: 2px dashed black;
+        padding-bottom: 10px;
+    }
+    .options label {
+        display: block;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .question input[type=text]{
+        height: 5vh;
+        width: 100%;
+        margin-bottom: 15px;
+        font-size: 17px;
+    }
+    .question select{
+        height: 5vh;
+        width: 100%;
+    }
+    .custom-file-upload {
+    width: 100%;
+    display: inline-block;
+    padding: 6px 3px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px dashed #000;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload span {
+    margin-right: 5px;
+}
+.rotate {
+    background: transparent;
+    height: 50px;
+    width: 50px;
+    padding: 0px;
+}
+.subject{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 10px;
+    margin-bottom: 10px;
+    background-color: #ffc107;
+}
+hr{
+    color: #000;
+    background-color: #000;
+    height: 2px;
+}
+.subject > button{
+    color: #000;
+    padding: 1vh 1.5vh;
+    background-color: transparent;
+    border-left: 1px solid black;
+    border-radius: 0px;
+}
+.subject > button:first-child{
+    color: #000;
+    padding: 1vh 1.5vh;
+    background-color: transparent;
+    border-left: none;
+    border-radius: 0px;
+}
+
+.header > .head{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px dashed #000;
+    margin-bottom: 2%;
+}
+.header > .head > button{
+    color: #000;
+    background: transparent;
+    height: 50px;
+    width: 50px;
+    padding: 0px;
+    width: max-content;
+}
+.header > .head > button> img{
+    background: transparent;
+    height: 30px;
+    width: 50px;
+    width: max-content;
+}
+.LoginContainer,
+.signupContainer{
+position: fixed;
+border: 1px solid #000;
+border-radius: 10px;
+width: 90%;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+height: max-content;
+width: 80%;
+padding: 10px;
+}
+.login,
+.signupForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login > button,
+.login > input,
+.signupForm > button,
+.signupForm > input {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.login > input,
+.signupForm > input{
+    height: 4.5vh;
+    padding-left: 10px;
+    border-radius: 30px;
+    border: 3px solid black;
+}
+.LoginContainer center img{
+    height: 30vh;
+}
+.signupContainer center img{
+    height: 20vh;
+}
+.name {
+    
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: bolder;
+  font-style: normal;
+    font-size: 30px;
+}
+.add {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 80%;
+    background: transparent;
+    color: #000;
+    border: 2px dashed black;
+    font-size: 24px;
+    font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+.intro {
+    display: flex;
+    justify-content: space-between;
+    background-color: #F3F1E0;
+}
+#submittedQuiz{
+    display: flex;
+    justify-content: center;
+}
+#submittedQuizContent{
+    width: 95%;
+    font-size: 19px;
+}
+.quizquestion {
+    border: 2px solid black;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 10px;
+}
+.quizquestion label {
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    border: 1px solid;
+    margin-bottom: 10px;
+    font-size: 19px;
+    padding-left: 10px;
+}
+
+.quizquestion input[type="radio"] {
+    display: none;
+}
+.today {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    border: 2px solid black;
+    padding: 10px 10px 0px 10px;
+}
+.today button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.today span {
+    padding: 0px 20px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid black;
+}
+</style>
+
+<!-- Add this inside the <head> tag -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    
+</head>
+<body>
+    <div class="LoginContainer" id="LoginContainer">
+        
+        <h2>Login</h2>
+        <center>
+        <img src="login.gif" alt=""></center>
+        <form class="login" id="loginForm" autocomplete="off">
+            <input type="text" id="loginUsername" placeholder="Email" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit" onclick="login()">Login</button>
+        </form>
+        <p>Don't have an account? <a href="#" onclick="showSignupForm()">Signup</a></p>
+    </div>
+
+    <div class="signupContainer" id="signupContainer" style="display: none;">
+        <h2>Signup</h2>
+        <center>
+        <img src="signup.gif" alt="signup">
+        </center>
+        <form class="signupForm" id="signupForm" autocomplete="off">
+            <input type="text" id="signupUsername" placeholder="Email" required autocomplete="off">
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <button type="button" onclick="signup()">Signup</button>
+        </form>
+        <p>have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
+    </div>
+    <div id="mainContent" style="display: none;">
+        <header>
+            <!-- Inside the <header> tag -->
+            <div class="header" id="user-info"><div class="head">
+                <span class="name" id="username-info"></span>
+                <button id="logoutButton"><img src="logout.gif" alt=""></button>
+            </div> <!-- Add a logout button -->
+            <center>select Subject to see quizzes<br>(select home for Today's Quizzes)</center>
+                <div class="subject" id="subject-buttons">
+                    <!-- Add five subject buttons -->
+                    <button onclick="showQuizzes('all')">Home</button>
+                    <button onclick="showQuizzes('Physics')">Physics</button>
+                    <button onclick="showQuizzes('Chemistry')">Chemistry</button>
+                    <button onclick="showQuizzes('Botany')">Botany</button>
+                    <button onclick="showQuizzes('Zoology')">Zoology</button>             
+                </div> <!-- Display subject buttons here -->
+                <hr>
+                <center>
+                <button class="add" id="add" type="button" onclick="addQuestion()">Add new Questions<br><img src="add.gif"></button>
+                </center>
+                <center>
+                <div class="today" id="today-quiz" style="display: none;">
+                </div></center>
+            </div>
+        </header>
+
+
+<div class="quiz-container" id="quiz-container" style="display: none;">
+    <h2>Add Quiz</h2>
+    <form id="quizForm" action="/submit" method="post" enctype="multipart/form-data">
+        <!-- Dynamic quiz question fields -->
+        <div id="quizQuestions">
+            <!-- Initial question field -->
+        </div>
+        <button type="button" onclick="submitQuiz()">Submit</button>
+        <button type="button" onclick="addQuestion()">Add Question</button>
+    </form>
+</div>
+<div id="submittedQuiz" style="display: none;">
+    <div id="submittedQuizContent"></div>
+</div>
+</div>
+
+
+<script>
+
+
+
+window.onload = function() {
+    var isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn === "true") {
+        // If the user is logged in, show the main content
+        showMainContent();
+        // Fetch and display today's quizzes based on parameters in the URL
+        var subject = getUrlParameter('subject');
+        if (subject) {
+            subject = subject.charAt(0).toUpperCase() + subject.slice(1); 
+            console.log(subject)
+            fetchAndDisplayTodayQuizzes(subject);
+            
+    }
+}
+    else{
+        
+    fetchQuizDataAndDisplay();
+    }
+};
+
+function fetchAndDisplayTodayQuizzes(subject){
+    
+    var user = localStorage.getItem("username");
+    var subjects = {}; // Object to store unique subjects and their quizzes
+    fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/quiz_data.json')
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to fetch quiz data from GitHub');
+        }
+    })
+    .then(data => {
+        // Decode quiz data
+        var quizData = JSON.parse(atob(data.content));
+
+        // Get today's date in the format "dd/mm/yyyy"
+        var today = new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+        // Filter quizzes based on today's date and the specified subject
+        quizData.forEach(quiz => {
+        // Get today's date in dd/mm/yyyy format
+        var today = new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
+        var parts = quiz.uploadDate.split('/'); // Split the upload date into day, month, and year
+        var uploadDate = parts.join('/'); // Rejoin the parts into a string
+        
+        console.log("Today:", today);
+        console.log("Upload Date:", uploadDate);
+        
+        if (!subjects[quiz.subject]) {
+            console.log(quiz.subject)
+            console.log('Not')
+            subjects[quiz.subject] = [];
+        }
+        // Check if the quiz was created today
+        if (uploadDate === today) {
+            subjects[quiz.subject].push(quiz);
+            console.log('2' + subjects)
+        }
+    });
+    console.log(subjects)
+    subjects[subject].forEach((quiz, index) => {
+                createQuizInterface(quiz, index + 1);
+            });
+
+    })
+    .catch(error => {
+        console.error('Error fetching quiz data:', error);
+        // Optionally, handle the error or provide feedback to the user
+    });
+}
+
+
+// Function to parse parameters from URL
+function getUrlParameter(name) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+// Function to fetch quiz data and display based on selected subject
+function fetchQuizDataAndDisplay(subject = 'all') {
+    fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/quiz_data.json')
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to fetch quiz data from GitHub');
+        }
+    })
+    .then(data => {
+        // Decode quiz data
+        var quizData = JSON.parse(atob(data.content));
+        console.log(quizData)
+
+        // Filter quizzes based on selected subject
+        if (subject !== 'all') {
+            quizData = quizData.filter(quiz => quiz.subject === subject);
+        }
+
+        // Display filtered quizzes
+        quizData.forEach((quiz, index) => {
+            createQuizInterface(quiz, index + 1);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching quiz data:', error);
+        // Optionally, handle the error or provide feedback to the user
+    });
+}
+
+// Function to show quizzes based on selected subject
+// Function to show quizzes based on selected subject
+function showQuizzes(subject) {
+    var url = window.location.href;
+    if (url.includes('?subject=')) {
+        window.history.replaceState({}, document.title, url.split('?')[0]);
+    }
+    var submittedQuizContent = document.getElementById("submittedQuizContent");
+    submittedQuizContent.innerHTML = ''; // Clear existing content
+    
+    // Check if subject is not "Home", then fetch and display quizzes
+    if (subject == 'all') {
+        fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/quiz_data.json')
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to fetch quiz data from GitHub');
+        }
+    })
+    .then(data => {
+        // Decode quiz data
+        var quizData = JSON.parse(atob(data.content));
+        console.log(quizData)
+
+        // Generate buttons for quizzes created by other users
+        generateTodayUserButtons(quizData);
+    })
+    .catch(error => {
+        console.error('Error fetching quiz data:', error);
+        // Optionally, handle the error or provide feedback to the user
+    });
+
+    }
+
+    else {
+        fetchQuizDataAndDisplay(subject);
+    }
+}
+
+function generateTodayUserButtons(quizData) {
+    var user = localStorage.getItem("username");
+    var subjects = {}; // Object to store unique subjects and their quizzes
+    
+    // Group quizzes by subject and filter only today's quizzes
+    quizData.forEach(quiz => {
+        // Get today's date in dd/mm/yyyy format
+        var today = new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
+        var parts = quiz.uploadDate.split('/'); // Split the upload date into day, month, and year
+        var uploadDate = parts.join('/'); // Rejoin the parts into a string
+        
+        console.log("Today:", today);
+        console.log("Upload Date:", uploadDate);
+        
+        if (!subjects[quiz.subject]) {
+            subjects[quiz.subject] = [];
+        }
+        // Check if the quiz was created today
+        if (uploadDate === today) {
+            console.log("Matched:", quiz.question);
+            subjects[quiz.subject].push(quiz);
+        } else {
+            subjects[quiz.subject] = []; 
+            console.log("Not Matched:", quiz.question);
+        }
+    });
+
+    var todayquiz = document.getElementById("today-quiz");
+    todayquiz.style.display = 'flex'; // Clear existing buttons
+    todayquiz.className = 'today'; // Clear existing buttons
+    todayquiz.innerHTML = ''; // Clear existing buttons
+    todayquiz.innerHTML = `<span>Today's Quizzes</span>`; // Clear existing buttons
+    
+    // Generate button for each subject\
+    Object.keys(subjects).forEach(subject => {
+        if (subjects[subject].length > 0) {
+            var button = document.createElement("button");
+            button.textContent = `Today's ${subject} Quizzes`;
+            button.onclick = function() {
+                var submittedQuizContent = document.getElementById("submittedQuizContent");
+                submittedQuizContent.innerHTML = ''; // Clear existing content
+                // Call createQuizInterface to display quizzes for the clicked subject
+                subjects[subject].forEach((quiz, index) => {
+                    createQuizInterface(quiz, index + 1);
+                });
+            };
+            todayquiz.appendChild(button);
+        }
+    });
+}
+
+
+
+
+// Function to dynamically create the quiz interface
+function createQuizInterface(quiz, quizNumber) {
+
+    var submittedQuizContent = document.getElementById("submittedQuizContent");
+    
+    document.getElementById("submittedQuiz").style.display = "flex";
+
+
+    // Displaying submitted quiz content
+    var questionDiv = document.createElement("div");
+    questionDiv.className = 'quizquestion';
+            questionDiv.innerHTML = `<div class="intro"><strong>Q.${quizNumber} </strong><span>By ${quiz.username} from ${quiz.subject}</span></div>`; // Display subject
+            questionDiv.innerHTML += `<p><strong>Question</strong> : ${quiz.question}</p>`;
+            // Displaying images if available
+            if (quiz.imageName) {
+            const imageElement = document.createElement('img');
+            imageElement.src = `https://raw.githubusercontent.com/Sanaullah2005/check2/main/images/${quiz.imageName}`;
+            imageElement.style.maxWidth = '100%';
+            questionDiv.appendChild(imageElement);
+            var br = document.createElement("br");
+            questionDiv.appendChild(br);
+        }
+            // Displaying options
+            var options = quiz.options;
+            var correctOptionIndex = quiz.correctOptionIndex;
+            options.forEach((option, optionIndex) => {
+                var label = document.createElement("label");
+                var radioButton = document.createElement("input");
+                radioButton.type = "radio";
+                radioButton.name = "q" + (quizNumber);
+                var isCorrect = optionIndex === correctOptionIndex;
+                radioButton.dataset.correct = isCorrect.toString();
+                radioButton.addEventListener("click", function() {
+                    disableOtherOptions(radioButton);
+                    if (isCorrect) {
+                        label.style.color = "green";
+                    } else {
+                        label.style.color = "red";
+                        var correctRadio = questionDiv.querySelector('input[type="radio"][data-correct="true"]');
+                        if (correctRadio) {
+                            correctRadio.parentElement.style.color = "green";
+                        }
+                    }
+                });
+                label.appendChild(radioButton);
+                label.appendChild(document.createTextNode(option));
+                questionDiv.appendChild(label);
+            });
+            submittedQuizContent.appendChild(questionDiv);
+    
+}
+
+
+function addQuestion() {
+    document.getElementById('add').style.display = 'none';
+    document.getElementById('quiz-container').style.display = 'block';
+    var quizQuestions = document.getElementById("quizQuestions");
+    var qNumber = quizQuestions.children.length;
+
+    if (qNumber == 0) {
+        var newQuestion = document.createElement("div");
+        newQuestion.classList.add("question");
+        quizQuestions.appendChild(newQuestion);
+    }
+
+    var questionNumber = quizQuestions.children.length;
+
+    // Show the quiz container if it was previously hidden
+    var quizContainer = document.getElementById("quiz-container");
+    quizContainer.style.display = "block";
+
+    var newQuestion = document.createElement("div");
+    newQuestion.classList.add("question");
+
+    newQuestion.innerHTML = `
+    
+    <label for="question${questionNumber}">Question ${questionNumber}:</label><br><br>
+    <label for="subject${questionNumber}">Select Subject</label>
+    <select name="subject[]" id="subject${questionNumber}">
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Botany">Botany</option>
+        <option value="Zoology">Zoology</option>
+    </select><br><br>
+        <input type="text" id="question${questionNumber}" name="question[]" placeholder="Enter your question">
+        <label for="image${questionNumber}" class="custom-file-upload">
+            <span class="image">Choose image (optional)</span>
+            <input type="file" id="image${questionNumber}" name="image" accept="image/*">
+        </label>
+        <div id="imagePreview${questionNumber}" style="display: none;"></div>
+        <input type="hidden" id="croppedImage${questionNumber}" name="croppedImage${questionNumber}">
+        <input type="text" name="options[]" placeholder="Option 1" value="Option 1" data-default="true" data-correct="false" onclick="clearDefaultValue(this)">
+        <input type="text" name="options[]" placeholder="Option 2" value="Option 2" data-default="true" data-correct="false" onclick="clearDefaultValue(this)">
+        <input type="text" name="options[]" placeholder="Option 3" value="Option 3" data-default="true" data-correct="false" onclick="clearDefaultValue(this)">
+        <input type="text" name="options[]" placeholder="Option 4" value="Option 4" data-default="true" data-correct="false" onclick="clearDefaultValue(this)">
+        <label>Choose correct Option :- </label>
+        <select name="correctOption">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+            <option value="4">Option 4</option>
+        </select>
+    `;
+
+    quizQuestions.appendChild(newQuestion);
+    
+// Add an event listener to the file input for image selection
+document.getElementById(`image${questionNumber}`).addEventListener("change", function(event) {
+    var input = event.target;
+    var file = input.files[0];
+
+    if (file) {
+        // Open a popup window or modal with Cropper.js for cropping
+        openImageCropper(file, questionNumber);
+    }
+});
+
+
+}
+function clearDefaultValue(element) {
+    if (element.dataset.default === "true") {
+        element.value = ""; // Clear the value
+        element.removeAttribute("data-default"); // Remove the data-default attribute
+    }
+}
+// Function to open a popup window for cropping the image
+function openImageCropper(file, questionNumber) {
+    // Create a modal overlay
+    var overlay = document.createElement("div");
+    overlay.id = "cropperOverlay";
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    overlay.style.zIndex = "9999";
+    document.body.appendChild(overlay);
+
+    // Create a container for the cropper
+    var cropperContainer = document.createElement("div");
+    cropperContainer.id = "cropperContainer";
+    cropperContainer.style.position = "absolute";
+    cropperContainer.style.top = "50%";
+    cropperContainer.style.left = "50%";
+    cropperContainer.style.height = "80%";
+    cropperContainer.style.width = "80%";
+    cropperContainer.style.transform = "translate(-50%, -50%)";
+    overlay.appendChild(cropperContainer);
+
+    // Create an img element for the uploaded image
+    var img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    cropperContainer.appendChild(img);
+
+    // Initialize Cropper.js with the uploaded image
+    // Initialize Cropper.js
+    var cropper = new Cropper(img, {
+                crop: function(event) {
+                    var canvas = cropper.getCroppedCanvas();
+                    // Update hidden input field with the cropped image data
+                    var croppedImageInput = document.getElementById(`croppedImage${questionNumber}`);
+                    croppedImageInput.value = canvas.toDataURL();
+                }
+            });
+
+            // Rotation controls
+            var rotationControls = document.createElement("div");
+            rotationControls.style.width = 'max-content';
+            
+    rotationControls.style.display = 'flex'
+    rotationControls.style.justifyContent = 'space-between'
+            rotationControls.innerHTML = `
+                <button class="rotate" id="rotateLeft${questionNumber}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.7131504,10.0709111 C14.9098327,7.70355942 12.6688602,6 10.03,6 C6.7162915,6 4.03,8.6862915 4.03,12 C4.03,15.3137085 6.7162915,18 10.03,18 C11.5998384,18 13.0720775,17.3958668 14.182389,16.3310255 C14.5809899,15.9487484 15.2140165,15.9619814 15.5962936,16.3605823 C15.9785708,16.7591831 15.9653377,17.3922098 15.5667369,17.7744869 C14.0876692,19.1929828 12.1210132,20 10.03,20 C5.611722,20 2.03,16.418278 2.03,12 C2.03,7.581722 5.611722,4 10.03,4 C13.3745978,4 16.2398191,6.05245481 17.4348574,8.96655791 L18.1183789,7.56408691 C18.3776609,7.07644842 18.9831596,6.8913289 19.4707981,7.15061088 C19.9584366,7.40989287 20.1435561,8.01539155 19.8842741,8.50303004 L17.9624887,12.44621 C17.9528713,12.4678547 17.9424227,12.4893142 17.9311313,12.5105502 C17.8014903,12.7543694 17.5852951,12.9225589 17.3405554,12.9973834 C17.0958157,13.0722078 16.8225314,13.0536672 16.5787122,12.9240262 C16.5463456,12.9068166 16.5153118,12.8880818 16.4856522,12.8679573 L12.8000412,10.6473649 C12.3124028,10.3880829 12.1272832,9.78258425 12.3865652,9.29494576 C12.6458472,8.80730727 13.2513459,8.62218774 13.7389844,8.88146973 L15.7131504,10.0709111 Z" transform="matrix(-1 0 0 1 22.032 0)" fill="#ffffff" class="color000 svgShape"></path></svg></button>
+                <button class="rotate" id="rotateRight${questionNumber}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.6831504,10.0709111 C16.8798327,7.70355942 14.6388602,6 12,6 C8.6862915,6 6,8.6862915 6,12 C6,15.3137085 8.6862915,18 12,18 C13.5698384,18 15.0420775,17.3958668 16.152389,16.3310255 C16.5509899,15.9487484 17.1840165,15.9619814 17.5662936,16.3605823 C17.9485708,16.7591831 17.9353377,17.3922098 17.5367369,17.7744869 C16.0576692,19.1929828 14.0910132,20 12,20 C7.581722,20 4,16.418278 4,12 C4,7.581722 7.581722,4 12,4 C15.3445978,4 18.2098191,6.05245481 19.4048574,8.96655791 L20.0883789,7.56408691 C20.3476609,7.07644842 20.9531596,6.8913289 21.4407981,7.15061088 C21.9284366,7.40989287 22.1135561,8.01539155 21.8542741,8.50303004 L19.9324887,12.44621 C19.9228713,12.4678547 19.9124227,12.4893142 19.9011313,12.5105502 C19.7714903,12.7543694 19.5552951,12.9225589 19.3105554,12.9973834 C19.0658157,13.0722078 18.7925314,13.0536672 18.5487122,12.9240262 C18.5163456,12.9068166 18.4853118,12.8880818 18.4556522,12.8679573 L14.7700412,10.6473649 C14.2824028,10.3880829 14.0972832,9.78258425 14.3565652,9.29494576 C14.6158472,8.80730727 15.2213459,8.62218774 15.7089844,8.88146973 L17.6831504,10.0709111 Z" fill="#ffffff" class="color000 svgShape"></path></svg></button>
+            `;
+            center = document.createElement('center')
+            center.appendChild(rotationControls);
+            cropperContainer.appendChild(center);
+3
+            // Add event listeners for rotation buttons
+            document.getElementById(`rotateLeft${questionNumber}`).addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent default behavior
+                cropper.rotate(-90);
+            });
+            document.getElementById(`rotateRight${questionNumber}`).addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent default behavior
+                cropper.rotate(90);
+            });
+
+    // Close button for the popup window
+    var confirmation = document.createElement('div')
+    confirmation.style.display = 'flex'
+    confirmation.style.justifyContent = 'space-between'
+    var closeButton = document.createElement("button");
+    closeButton.style.height = '50px';
+    closeButton.style.width = '50px';
+    closeButton.style.padding = '0px';
+    closeButton.style.background = 'white'
+    closeButton.style.borderRadius = '30px'
+    closeButton.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" id="close"><path d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M15.7,14.3c0.4,0.4,0.4,1,0,1.4c-0.4,0.4-1,0.4-1.4,0
+	L12,13.4l-2.3,2.3c-0.4,0.4-1,0.4-1.4,0c-0.4-0.4-0.4-1,0-1.4l2.3-2.3L8.3,9.7c-0.4-0.4-0.4-1,0-1.4c0.4-0.4,1-0.4,1.4,0l2.3,2.3
+	l2.3-2.3c0.4-0.4,1-0.4,1.4,0c0.4,0.4,0.4,1,0,1.4L13.4,12L15.7,14.3z"></path></svg>
+    `;
+    closeButton.addEventListener("click", function() {
+        // Remove the overlay and cropper container when the close button is clicked
+        document.body.removeChild(overlay);
+    });
+    confirmation.appendChild(closeButton);
+
+    // Confirm button for finishing cropping
+    var confirmButton = document.createElement("button");
+    confirmButton.style.height = '50px';
+    confirmButton.style.width = '50px';
+    confirmButton.style.padding = '0px';
+    confirmButton.style.background = 'white'
+    confirmButton.style.borderRadius = '30px'
+    confirmButton.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="confirm"><path d="M12 1C5.926 1 1 5.926 1 12s4.926 11 11 11 11-4.926 11-11S18.074 1 12 1zm-1.5 15.5L6 12l1.5-1.5 3 3 5.956-5.956 1.5 1.413L10.5 16.5z"></path></svg>
+    `;
+    confirmButton.addEventListener("click", function() {
+        // Get the cropped image data
+        var croppedImageData = cropper.getCroppedCanvas().toDataURL();
+
+        // Display the cropped image in a preview area
+        displayCroppedImage(croppedImageData, questionNumber);
+
+        // Remove the overlay and cropper container
+        document.body.removeChild(overlay);
+    });
+    confirmation.appendChild(confirmButton);
+    overlay.appendChild(confirmation);
+}
+
+
+// Function to display the cropped image in a preview area
+function displayCroppedImage(croppedImageData, questionNumber) {
+    // Get the preview element
+    var preview = document.getElementById(`imagePreview${questionNumber}`);
+
+    // Create an img element for the cropped image
+    var img = document.createElement("img");
+    img.src = croppedImageData;
+    img.style.height = "200px"; 
+    preview.style.display = 'block'
+
+    // Clear the preview area and append the cropped image
+    preview.appendChild(img);
+}
+
+
+
+
+function submitQuiz() {
+    var form = document.getElementById("quizForm");
+    var formData = new FormData(form);
+
+    var allQuestionsFilled = true;
+    formData.getAll('question[]').forEach((question, index) => {
+        var options = formData.getAll('options[]').slice(index * 4, (index + 1) * 4);
+        var imageInput = document.getElementById(`image${index + 1}`);
+        var croppedImage = formData.get(`croppedImage${index + 1}`);
+
+        // Check if question text or image is provided
+        if (!question.trim() && !croppedImage) {
+            allQuestionsFilled = false;
+            alert(`Question ${index + 1} must have either text or an image.`);
+            return;
+        }
+
+        // Set default values for options that are null or empty
+        var optionsFilled = false;
+        options.forEach((option, optionIndex) => {
+            if (option.trim()) {
+                console.log('true')
+                optionsFilled = true; // Flag to indicate that options have values
+            } else {
+                // Set default value only if the option is null or empty and there are no other filled options for this question
+                if (!optionsFilled) {
+                    console.log('false')
+                    formData.set(`options[${index * 4 + optionIndex}]`, `Option ${optionIndex + 1}`);
+                }
+            }
+        });
+
+        // Check if all options are filled and have different values
+        var uniqueOptions = new Set(options);
+        if (options.length !== 4 || uniqueOptions.size !== 4) {
+            allQuestionsFilled = false;
+            alert(`Question ${index + 1} must have four different options.`);
+            return;
+        }
+    });
+
+
+    if (!allQuestionsFilled) {
+        return; // If any validation fails, stop further processing
+    }
+
+    
+    // Convert form data to JSON for further processing
+    var quizData = {};
+    formData.forEach((value, key) => {
+        if (!quizData.hasOwnProperty(key)) {
+            quizData[key] = [];
+        }
+        quizData[key].push(value);
+    });
+
+    // Generate quiz content based on submitted data
+    var submittedQuizContent = document.getElementById("submittedQuizContent");
+
+    // Inside the submitQuiz() function
+var quizContent = []; // Array to hold quiz content for JSON
+
+var username = localStorage.getItem("username");
+var date = generateUniqueImageName();
+
+Object.keys(quizData).forEach((key, index) => {
+    if (key === "question[]") {
+        quizData[key].forEach((question, index) => {
+            var questionData = {
+                question: question,
+                subject: formData.getAll('subject[]')[index], // Get selected subject for the question
+                options: quizData["options[]"].slice(index * 4, (index + 1) * 4),
+                correctOptionIndex: parseInt(quizData["correctOption"][index]) - 1 // Adjust for 0-based index
+            };
+            quizContent.push(questionData);
+
+            // Displaying submitted quiz content
+            var questionDiv = document.createElement("div");
+            questionDiv.className = 'quizquestion';
+            questionDiv.innerHTML = `<p>${index + 1}. ${question}</p>`;
+            questionDiv.innerHTML += `<p>Subject: ${questionData.subject}</p>`; // Display subject
+            // Displaying images if available
+            var croppedImage = formData.get(`croppedImage${index + 1}`);
+            if (croppedImage) {
+                var imageElement = document.createElement("img");
+                imageElement.src = croppedImage;
+                imageElement.style.maxWidth = "100%";
+                var br = document.createElement("br");
+                questionDiv.appendChild(imageElement);
+                questionDiv.appendChild(br);
+            }
+            // Displaying options
+            var options = questionData.options;
+            var correctOptionIndex = questionData.correctOptionIndex;
+            options.forEach((option, optionIndex) => {
+                var label = document.createElement("label");
+                var radioButton = document.createElement("input");
+                radioButton.type = "radio";
+                radioButton.name = "q" + (index + 1);
+                var isCorrect = optionIndex === correctOptionIndex;
+                radioButton.dataset.correct = isCorrect.toString();
+                radioButton.addEventListener("click", function() {
+                    disableOtherOptions(radioButton);
+                    if (isCorrect) {
+                        label.style.color = "green";
+                    } else {
+                        label.style.color = "red";
+                        var correctRadio = questionDiv.querySelector('input[type="radio"][data-correct="true"]');
+                        if (correctRadio) {
+                            correctRadio.parentElement.style.color = "green";
+                        }
+                    }
+                });
+                label.appendChild(radioButton);
+                label.appendChild(document.createTextNode(option));
+                questionDiv.appendChild(label);
+            });
+            var user = document.createElement("p")
+            user.innerText = username
+            questionDiv.appendChild(user)
+            submittedQuizContent.appendChild(questionDiv);
+        });
+    }
+});
+    document.getElementById("submittedQuiz").style.display = "flex";
+    var quizContainer = document.getElementById("quiz-container");
+    quizContainer.style.display = "none";
+
+    // Convert form data to JSON for further processing
+    var quizData = {};
+    formData.forEach((value, key) => {
+        if (!quizData.hasOwnProperty(key)) {
+            quizData[key] = [];
+        }
+        quizData[key].push(value);
+    });
+
+    // Generate quiz content based on submitted data
+    var quizContent = []; // Array to hold quiz content for JSON
+
+    Object.keys(quizData).forEach(key => {
+        if (key === "question[]") {
+            quizData[key].forEach((question, index) => {
+                var questionData = {
+                    question: question,
+                    options: quizData["options[]"].slice(index * 4, (index + 1) * 4),
+                    correctOptionIndex: parseInt(quizData["correctOption"][index]) - 1, // Adjust for 0-based index
+                    subject: formData.getAll('subject[]')[index], // Get selected subject for the question
+                    uploadDate: new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }), // Indian date format (only date)
+                    username: localStorage.getItem("username") // Indian date format (only date)
+                };
+
+                // Fetch selected image name using the input element's ID
+                var imageInput = document.getElementById(`image${index+1}`);
+                var imageName = "";
+                if (imageInput && imageInput.files.length > 0) {
+                    imageName = date + (index + 1) + '.png';
+                }
+
+                // Append image name to question data
+                questionData.imageName = imageName;
+
+                quizContent.push(questionData);
+            });
+        }
+    });
+
+    // Fetch existing quiz data from GitHub
+    fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/quiz_data.json')
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Failed to fetch existing quiz data from GitHub');
+    })
+    .then(existingData => {
+        // Decode existing data content
+        var existingContent = JSON.parse(atob(existingData.content));
+        
+        // Append new quiz content to existing content
+        existingContent = existingContent.concat(quizContent);
+
+        // Convert merged content to JSON
+        var mergedContent = JSON.stringify(existingContent, null, 2);
+
+        // Upload merged content back to GitHub
+        return fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/quiz_data.json', {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer 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',
+                'Content-Type': 'application/json'
+            },
+            
+            body: JSON.stringify({
+                message: 'Append quiz data',
+                content: btoa(mergedContent), // Encode content as base64
+                sha: existingData.sha // SHA of the existing file
+            })
+        });
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Quiz data appended successfully');
+            // Optionally, provide feedback to the user
+        } else {
+            throw new Error('Failed to upload quiz data to GitHub');
+        }
+    })
+    .catch(error => {
+        alert('Error appending quiz data:', error);
+        // Optionally, provide feedback to the user
+    });
+
+        // Upload each cropped image with a delay between requests
+Object.keys(quizData).forEach((key, index) => {
+    if (key.startsWith("croppedImage")) { // Check for cropped images
+        var croppedImageData = quizData[key][0];
+        var questionNumber = key.replace("croppedImage", ""); // Extract the question number
+        var randomString = Math.random().toString(36).substring(7); // Generate a random string
+        var imageName = date + questionNumber + '.png'; // Generate a unique name for the image
+        var delay = index * 500; // Delay increases with each image (1 second delay for each image)
+        if (croppedImageData){
+        uploadCroppedImageWithDelay(imageName, croppedImageData, delay);
+        }
+    }
+});
+var quizQuestionsContainer = document.getElementById("quizQuestions");
+    quizQuestionsContainer.innerHTML = '';
+
+    document.getElementById('add').style.display = 'block';
+}
+function disableOtherOptions(selectedOption) {
+    console.log('checked')
+    var questionNumber = selectedOption.name.replace("q", ""); // Extract question number
+    var options = document.querySelectorAll(`input[name="q${questionNumber}"]`);
+    options.forEach(option => {
+        if (option !== selectedOption) {
+            option.disabled = true;
+        }
+    });
+}
+
+function generateUniqueImageName() {
+    // Get the current timestamp in milliseconds
+    var timestamp = new Date().getTime()
+    a= 'sds'+timestamp.toString()
+    
+    // Generate a random unique identifier (UUID)
+    var uuid = 'xxxxxxxxxxxx4xxxyxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (timestamp + Math.random() * 16) % 16 | 0;
+        timestamp = Math.floor(timestamp / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    
+    // Concatenate the timestamp and UUID to create a unique image name
+    var uniqueImageName = a + uuid;
+    
+    return uniqueImageName
+}
+
+
+// Function to upload cropped image with a delay between requests
+function uploadCroppedImageWithDelay(imageName, croppedImageData, delay) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/images/' + imageName, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer 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',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Add cropped image',
+                    content: croppedImageData.split(',')[1] // Extract base64 data
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('image uploaded successfully:', imageName);
+                    resolve();
+                } else {
+                    throw new Error('Failed to upload cropped image to GitHub');
+                }
+            })
+            .catch(error => {
+                alert('Error uploading image:', error);
+                reject(error);
+            });
+        }, delay);
+    });
+}
+
+function showSignupForm() {
+    // Hide login form and show signup form
+    document.getElementById("LoginContainer").style.display = "none";
+    document.getElementById("signupContainer").style.display = "block";
+}
+
+function showLoginForm() {
+    // Hide login form and show signup form
+    document.getElementById("LoginContainer").style.display = "block";
+    document.getElementById("signupContainer").style.display = "none";
+}
+
+
+
+function login() {
+    var username = document.getElementById("loginUsername").value;
+    var password = document.getElementById("loginPassword").value;
+
+    fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/user.json')
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to fetch user data from GitHub');
+        }
+    })
+    .then(data => {
+        // Decode user data
+        var userData = JSON.parse(atob(data.content));
+
+        // Check if the username and password match any user's credentials
+        var user = userData.find(user => user.username === username && user.password === password);
+
+        if (user) {
+            // Login successful
+            localStorage.setItem("isLoggedIn", "true"); // Set the user's login status to true
+            localStorage.setItem("username", username); // Store the username in localStorage
+            showMainContent();
+        } else {
+            // Login failed
+            alert("Invalid username or password. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching user data:', error);
+        // Optionally, handle the error or provide feedback to the user
+    });
+}
+
+function showMainContent() {
+    var username = localStorage.getItem("username");
+    document.getElementById("LoginContainer").style.display = "none";
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("username-info").innerText = 'Welcome ' + username;
+}
+
+function logout() {
+    // Clear the user's authentication status and related data
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("username");
+
+    // Redirect the user to the login/signup section
+    document.getElementById("mainContent").style.display = "none";
+    document.getElementById("LoginContainer").style.display = "block";
+}
+
+// Call the logout function when logout button is clicked
+document.getElementById("logoutButton").addEventListener("click", logout);
+
+function signup() {
+    // Perform signup functionality
+    var username = document.getElementById("signupUsername").value;
+    var password = document.getElementById("signupPassword").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+
+    // Here you would typically send a request to your backend server to create a new user
+    // For simplicity, let's assume successful signup if username, password, and confirmPassword are not empty and password matches confirmPassword
+    if (username && password && confirmPassword && password === confirmPassword) {
+        // Save user data (username and password) to GitHub repository
+        var userData = {
+            username: username,
+            password: password
+        };
+
+        fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/user.json')
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Failed to fetch user data from GitHub');
+        })
+        .then(existingData => {
+            // Decode existing data content
+            var existingContent = JSON.parse(atob(existingData.content));
+            
+            // Append new user data to existing content
+            existingContent.push(userData);
+
+            // Convert merged content to JSON
+            var mergedContent = JSON.stringify(existingContent, null, 2);
+
+            // Upload merged content back to GitHub
+            return fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/user.json', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer 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',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Append user data',
+                    content: btoa(mergedContent), // Encode content as base64
+                    sha: existingData.sha // SHA of the existing file
+                })
+            });
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to login section
+                document.getElementById("signupContainer").style.display = "none";
+                document.getElementById("LoginContainer").style.display = "block";
+                alert("Signup successful. Please login to continue.");
+            } else {
+                throw new Error('Failed to upload user data to GitHub');
+            }
+        })
+        .catch(error => {
+            console.error('Error appending user data:', error);
+            // Optionally, provide feedback to the user
+        });
+
+    } else {
+        // Show error message or handle unsuccessful signup
+        alert("Invalid input or passwords do not match. Please try again.");
+    }
+}
+
+
+</script>
+
+</body>
+</html>
