@@ -774,7 +774,7 @@ function displayCroppedImage(croppedImageData, questionNumber) {
     // Create an img element for the cropped image
     var img = document.createElement("img");
     img.src = croppedImageData;
-    img.style.width = "100%";
+    img.style.width = "100%"; 
     preview.style.display = 'block'
 
     // Clear the preview area and append the cropped image
@@ -973,7 +973,7 @@ Object.keys(quizData).forEach((key, index) => {
         return fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/quiz_data.json', {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer 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',
+                'Authorization': 'Bearer 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',
                 'Content-Type': 'application/json'
             },
             
@@ -1052,7 +1052,7 @@ function uploadCroppedImageWithDelay(imageName, croppedImageData, delay) {
             fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/images/' + imageName, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer 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',
+                    'Authorization': 'Bearer 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',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -1181,7 +1181,7 @@ function signup() {
             return fetch('https://api.github.com/repos/Sanaullah2005/check2/contents/user.json', {
                 method: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer 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',
+                    'Authorization': 'Bearer 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',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
